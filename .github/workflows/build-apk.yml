@@ -2,6 +2,7 @@ name: Build Android APK
 on:
   push:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,19 +10,32 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Setup Java (APK İçin Şart)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
 
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Android Artifacts
-        run: npx expo export --platform android
+      - name: Build Android Release APK
+        run: |
+          # Bu komut Expo'nun yerel derleyicisini kullanarak gerçek APK üretir
+          npx expo run:android --variant release --no-install
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: UserLooperGen-APK
-          path: dist/
+          # APK'nın oluştuğu standart Android yolu
+          path: android/app/build/outputs/apk/release/app-release.apk
+          
