@@ -30,8 +30,7 @@ jobs:
       - name: Build Android Release APK
         run: |
           # Bu komut Expo'nun yerel derleyicisini kullanarak gerçek APK üretir
-          npx expo run:android --variant release --no-install
-
+          yes | npx expo run:android --variant release --no-install
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
